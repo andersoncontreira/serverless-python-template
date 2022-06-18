@@ -62,7 +62,7 @@ PUT /v1/product/<uuid> - Complete Product Update
 - MySQL
 - Redis
 - Swagger
-- Restful
+- RESTful
 - HATEOS
 
 
