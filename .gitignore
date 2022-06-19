@@ -154,3 +154,4 @@ dmypy.json
 .pyre/
 /.idea/
 /dist/
+/serverless_python_template.egg-info/
