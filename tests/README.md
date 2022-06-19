@@ -1,23 +1,23 @@
-# Testes
-Descrição da estrutura da pasta e conceitos
+# Tests
+Description of the folder structure and concepts
 
-## Testes de unidade
-* Testes que se utiliza de mocks para evitar conexões reais a componetes externos;
-* Testes focados na funcionalidade e não nos dados em si;
-* Testes para serem executados em pipelines de CI;
-* A duração destes testes devem ser de no máximo 1s por arquivo, sendo o ideal rodar em milisegundos;
+## Unit Tests
+* Tests that use mocks to avoid real connections to external components;
+* Tests focused on functionality and not on the data itself;
+* Tests to run in CI pipelines;
+* The duration of these tests should be a maximum of 1s per file, ideally running in milliseconds;
 
-## Testes de integração
-* Testes que não devem executar fixtures ou alterações de recursos para evitar problemas;
-* Testes focados na integração de componentes externos com a aplicação em questão;
-* Testes para serem executados em pipelines de CD;
-* A duração destes vai depender dos cenários desenvolvidos, porém recomendado criar testes objetivos para não demorar muito o pipeline;
+## Integration tests
+* Tests that should not run fixtures or feature changes to avoid problems;
+* Tests focused on the integration of external components with the application in question;
+* Tests to run in CD pipelines;
+* The duration of these will depend on the scenarios developed, however, it is recommended to create objective tests so that the pipeline does not take too long;
 
-## Testes de componentes
-* Testes bases para o processo de TDD;
-* Testes focados no comportamento, cenários e dados dos processo do projeto;
-* Testes para serem executados localmente em conjunto do docker que irá prover o acesso local a recursos como banco de dados e afins;
-* A duração destes vai depender dos cenários desenvolvidos, mas a ideia destes testes é explorar diversos cenários possíveis;
+## Component Tests
+* Base tests for the TDD process;
+* Tests focused on the behavior, scenarios and data of the project process;
+* Tests to be executed locally in a docker suite that will provide local access to resources such as databases and the like;
+* The duration of these will depend on the scenarios developed, but the idea of ​​these tests is to explore several possible scenarios;
 
-## Referências 
+## References
 * https://martinfowler.com/articles/microservice-testing/
