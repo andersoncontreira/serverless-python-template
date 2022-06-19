@@ -1,3 +1,6 @@
+#!/bin/bash
+python3 -m pip install -U Commitizen
+
 # pre-commit sample-config > .pre-commit-config.yaml
 pre-commit install
 

@@ -52,19 +52,26 @@ PUT /v1/product/<uuid> - Complete Product Update
 - apispec
 - marshmallow
 - Flask
+- Unittest
+- mocks
 
 ## Components
-- Docker-compose
+- Projects Guidelines (Best practices)
+- Docker Management (Docker-Compose)
 - Localstack
-- OpenApi
-- SQS Integration
-- Flask
 - MySQL
 - Redis
-- Swagger
-- RESTful
-- HATEOS
-
+- OpenApi (Swagger)
+- GitHub Actions
+- Tests (Unit, Component, and Integration)
+- Coverage Reports
+- Code formatter (AutoPEP88)
+- Lint (Pylint)
+- Standard commits (Commitizen)
+- Standard files setup (Editorconfig)
+- REST (RESTful & HATEOS)
+- CodeQuality (Sonar)
+- Database Migrations (SQLAlchemy)
 
 ## Kong configuration
 Configure Kong API Gateway to work with API Gateway compatibility.
@@ -125,12 +132,12 @@ Execute the follow command:
 ./scripts/fixenv.sh
 ```
 
-## Informações sobre scripts de automação
-A seguir descrevemos o uso dos scripts de automação.
-Estes scripts kebab case ajudam o desenvolvedor nas tarefas em geral.
+## Information about automation scripts
+The following describes the use of automation scripts.
+These kebab case scripts help the developer in general tasks.
 
-### Scripts gerais
-Kebab case scripts para ajudar o desenvolvedor em tarefas gerais.
+### General scripts
+Kebab case scripts to help the developer with general tasks.
 
 ### General scripts
 Kebab case scripts to help the developer with general tasks.
@@ -145,6 +152,7 @@ Kebab case scripts to help the developer with general tasks.
 | commit.sh                   | Run the communitarization tool to commit the message                                 | Local development |
 | fixenv.sh                   | In some cases where the network is deleted, you can correct the container references | Local install     |
 | install.sh                  | Script to install dependencies                                                       | Local install     |
+| dev.sh                      | Script to installl dev dependencies tools                                            | Local install     |
 | openapi.sh                  | Script to generate openapi.yaml                                                      | CI/CD pipeline    |
 | pre-commit-config.sh        | Script to prepare the local environment to run pre-commit tools                      | Local development |
 | preenv.sh                   | Script to run pre-build commands                                                     | Local boot        |
@@ -260,8 +268,8 @@ See the license: [LICENSE.md](LICENSE.md).
 * For docstring syntax, please use `reStructuredText`
 * For line limit usage 100 characters as defined by PEP8
 
-## Pylint
-To run pylint in the project's source code, run the following command:
+## Lint
+To run the lint in the project's source code, run the following command:
 ```bash
 ./scripts/pylint.sh
 ```
@@ -271,8 +279,8 @@ Or:
 ./scripts/pylint.sh ./app.py
 ```
 
-## AutoPEP8
-To run autopep8 on the project's source code, run the following command:
+## Code Format
+To run the code formation  on the project's source code, run the following command:
 ```bash
 ./scripts/autopep8.sh
 ```
@@ -283,14 +291,19 @@ Or:
 ```
 
 ## Pre-commit
-To install pre-commit to run the local development environment:
-```bash
-./scripts/venv.sh
-```
-> the library details are present in requirements-local.txt
-
-After you run:
-
+To install pre-commit execute the follow command:
 ```bash
 ./scripts/pre-commit-config.sh
+```
+
+## Build
+To execute the build of the project execute the follow command:
+```bash
+./scripts/build.sh
+```
+
+## Guidelines
+To execute the guidelines validation of the project execute the follow command:
+```bash
+./scripts/guidelines-checker.py
 ```

@@ -17,6 +17,5 @@ fi
 # execute the boot
 bash ./scripts/boot.sh
 
-# execute the flask
-# flask run --host 0.0.0.0
+# execute the server
 python3 server.py
