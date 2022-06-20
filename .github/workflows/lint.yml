@@ -50,8 +50,8 @@ jobs:
           python -m pip install -r ./requirements.txt
           python -m pip install -r ./requirements-local.txt
           python -m pip install -r ./requirements-vendor.txt
-  pylint:
-    name: Setup pylint (Ubuntu 18.04)
+  lint:
+    name: Setup the lint (Ubuntu 18.04)
     runs-on: ubuntu-18.04
     strategy:
       matrix:
@@ -64,9 +64,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-      - name: Install pylint
+      - name: Install the lint
         run: |
           pip install pylint
-      - name: Execute pylint
+      - name: Execute the lint
         run: |
           ./scripts/pylint.sh
