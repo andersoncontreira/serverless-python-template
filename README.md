@@ -1,4 +1,4 @@
-# serverless-python-template
+# serverless-python-template  (Work in progress...)
 Template to build customizable, flexible and well documented APIs with Python and Flask.
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
