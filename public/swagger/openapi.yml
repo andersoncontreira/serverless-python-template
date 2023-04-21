@@ -13,19 +13,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheckSchema'
+                $ref: '#/components/schemas/HealthCheck'
         '424':
           description: Failed dependency response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheckSchema'
+                $ref: '#/components/schemas/HealthCheck'
         '503':
           description: Service unavailable response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheckSchema'
+                $ref: '#/components/schemas/HealthCheck'
   /v1/product:
     get:
       summary: Product List
@@ -261,6 +261,54 @@ info:
 openapi: 3.0.2
 components:
   schemas:
+    Entry:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            type: string
+            example: db
+        duration:
+          type: string
+          example: '0:00:00.013737'
+        status:
+          type: string
+          example: healthy
+    EntryData:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Entry'
+    HealthCheck:
+      type: object
+      properties:
+        entries:
+          $ref: '#/components/schemas/EntryData'
+        status:
+          type: string
+          example: healthy
+        total_duration:
+          type: string
+          example: '0:00:00.013737'
+    Meta:
+      type: object
+      properties:
+        first:
+          type: string
+          format: url
+        href:
+          type: string
+          format: url
+        previous:
+          type: string
+          format: url
+        next:
+          type: string
+          format: url
+        last:
+          type: string
+          format: url
     RequestControl:
       type: object
       properties:
@@ -268,34 +316,16 @@ components:
           type: integer
         offset:
           type: integer
-        count:
-          type: integer
         limit:
+          type: integer
+        count:
           type: integer
       required:
       - limit
-    Meta:
-      type: object
-      properties:
-        href:
-          type: string
-          format: url
-        next:
-          type: string
-          format: url
-        previous:
-          type: string
-          format: url
-        last:
-          type: string
-          format: url
-        first:
-          type: string
-          format: url
     Product:
       type: object
       properties:
-        sku:
+        supplier_id:
           type: integer
           example: 1
         active:
@@ -303,34 +333,40 @@ components:
           enum:
           - 0
           - 1
-        id:
-          type: integer
-          example: 1
-        deleted_at:
+        updated_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+          example: Common Pencil
+        created_at:
           type: string
           format: date-time
         description:
           type: string
           example: Common Pencil Description
-        name:
-          type: string
-          example: Common Pencil
-        supplier_id:
-          type: integer
-          example: 1
-        updated_at:
+        deleted_at:
           type: string
           format: date-time
         uuid:
           type: string
           format: uuid
           example: 4bcad46b-6978-488f-8153-1c49f8a45244
-        created_at:
-          type: string
-          format: date-time
+        id:
+          type: integer
+          example: 1
+        sku:
+          type: integer
+          example: 1
     HateosProductListResponse:
       type: object
       properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        params:
+          type: array
+          items:
+            type: string
         success:
           type: boolean
           example: true
@@ -339,19 +375,13 @@ components:
         message:
           type: string
           example: Success
-        params:
-          type: array
-          items:
-            type: string
-        label:
-          type: string
-          example: common.success
-        meta:
-          $ref: '#/components/schemas/Meta'
         data:
           type: array
           items:
             $ref: '#/components/schemas/Product'
+        label:
+          type: string
+          example: common.success
         code:
           type: integer
           example: 1
@@ -360,23 +390,23 @@ components:
     ProductListErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-          example: false
-        trace:
+        details:
           type: string
-        message:
-          type: string
-          example: Unable to return the list data, please review your request
         params:
           type: array
           items:
             type: string
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Unable to return the list data, please review your request
+        trace:
+          type: string
         label:
           type: string
           example: common.error.list_error
-        details:
-          type: string
         code:
           type: integer
           example: 11
@@ -387,34 +417,34 @@ components:
       properties:
         href:
           type: string
-        method:
-          type: string
         rel:
+          type: string
+        method:
           type: string
     HateosProductGetResponse:
       type: object
       properties:
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        params:
+          type: array
+          items:
+            type: string
         success:
           type: boolean
           example: true
         message:
           type: string
           example: Success
-        params:
-          type: array
-          items:
-            type: string
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/Link'
+        data:
+          $ref: '#/components/schemas/Product'
         label:
           type: string
           example: common.success
-        meta:
-          $ref: '#/components/schemas/Meta'
-        data:
-          $ref: '#/components/schemas/Product'
         code:
           type: integer
           example: 1
@@ -423,23 +453,23 @@ components:
     ProductGetErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-          example: false
-        trace:
+        details:
           type: string
-        message:
-          type: string
-          example: Unable to find the record
         params:
           type: array
           items:
             type: string
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Unable to find the record
+        trace:
+          type: string
         label:
           type: string
           example: common.error.find_error
-        details:
-          type: string
         code:
           type: integer
           example: 14
@@ -448,7 +478,7 @@ components:
     ProductCreateRequest:
       type: object
       properties:
-        sku:
+        supplier_id:
           type: integer
           example: 1
         active:
@@ -456,33 +486,33 @@ components:
           enum:
           - 0
           - 1
-        description:
-          type: string
-          example: Common Pencil description
         name:
           type: string
           example: Common Pencil
-        supplier_id:
+        description:
+          type: string
+          example: Common Pencil description
+        sku:
           type: integer
           example: 1
     ProductCreateResponse:
       type: object
       properties:
+        params:
+          type: array
+          items:
+            type: string
         success:
           type: boolean
           example: true
         message:
           type: string
           example: Success
-        params:
-          type: array
-          items:
-            type: string
+        data:
+          $ref: '#/components/schemas/Product'
         label:
           type: string
           example: common.success
-        data:
-          $ref: '#/components/schemas/Product'
         code:
           type: integer
           example: 1
@@ -491,23 +521,23 @@ components:
     ProductCreateErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-          example: false
-        trace:
+        details:
           type: string
-        message:
-          type: string
-          example: Unable to create the record
         params:
           type: array
           items:
             type: string
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Unable to create the record
+        trace:
+          type: string
         label:
           type: string
           example: common.error.create_error
-        details:
-          type: string
         code:
           type: integer
           example: 17
@@ -516,7 +546,7 @@ components:
     ProductCompleteUpdateRequest:
       type: object
       properties:
-        sku:
+        supplier_id:
           type: integer
           example: 1
         active:
@@ -524,33 +554,33 @@ components:
           enum:
           - 0
           - 1
-        description:
-          type: string
-          example: Common Pencil description
         name:
           type: string
           example: Common Pencil
-        supplier_id:
+        description:
+          type: string
+          example: Common Pencil description
+        sku:
           type: integer
           example: 1
     ProductUpdateResponse:
       type: object
       properties:
+        params:
+          type: array
+          items:
+            type: string
         success:
           type: boolean
           example: true
         message:
           type: string
           example: Success
-        params:
-          type: array
-          items:
-            type: string
+        data:
+          $ref: '#/components/schemas/Product'
         label:
           type: string
           example: common.success
-        data:
-          $ref: '#/components/schemas/Product'
         code:
           type: integer
           example: 1
@@ -559,23 +589,23 @@ components:
     ProductUpdateErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-          example: false
-        trace:
+        details:
           type: string
-        message:
-          type: string
-          example: Unable to update the record
         params:
           type: array
           items:
             type: string
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Unable to update the record
+        trace:
+          type: string
         label:
           type: string
           example: common.error.update_error
-        details:
-          type: string
         code:
           type: integer
           example: 18
@@ -590,23 +620,23 @@ components:
     ProductSoftDeleteResponse:
       type: object
       properties:
+        params:
+          type: array
+          items:
+            type: string
         success:
           type: boolean
           example: true
         message:
           type: string
           example: Success
-        params:
-          type: array
-          items:
-            type: string
-        label:
-          type: string
-          example: common.success
         data:
           type: object
           example:
             deleted: true
+        label:
+          type: string
+          example: common.success
         code:
           type: integer
           example: 1
@@ -615,23 +645,23 @@ components:
     ProductSoftDeleteErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-          example: false
-        trace:
+        details:
           type: string
-        message:
-          type: string
-          example: Unable to update the record
         params:
           type: array
           items:
             type: string
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Unable to update the record
+        trace:
+          type: string
         label:
           type: string
           example: common.error.update_error
-        details:
-          type: string
         code:
           type: integer
           example: 18
