@@ -277,13 +277,17 @@ def print_env(app, logger):
 
 
 def get_environment():
-    environment = 'development'
+    # to let the variable compatible with the core of the Flask
+    # defaults["ENV"] = os.environ.get("FLASK_ENV") or "production"
+    environment = 'production'
     if 'ENVIRONMENT' in os.environ:
         environment = os.environ['ENVIRONMENT']
     elif 'ENVIRONMENT_NAME' in os.environ:
         environment = os.environ['ENVIRONMENT_NAME']
     elif 'APP_ENV' in os.environ:
         environment = os.environ['APP_ENV']
+    elif 'FLASK_ENV' in os.environ:
+        environment = os.environ['FLASK_ENV']
 
     if environment == "dev":
         environment = "development"

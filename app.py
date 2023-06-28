@@ -4,52 +4,67 @@ This module contains the handler method
 """
 import base64
 import os
-import pymysql
-import boot
-from flask_sqlalchemy import SQLAlchemy
+
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+
+import boot
 from application import APP_NAME, APP_VERSION, http_helper
 from application import helper
 from application.config import get_config
-from application.database.mysql import get_uri, run_compatible_with_sqlalchemy
+from application.core import Application
+from application.database.mysql import run_compatible_with_sqlalchemy, get_uri
 from application.enums.messages import MessagesEnum
 from application.exceptions import ApiException, ValidationException, CustomException
-from application.core import Application
 from application.helper import open_vendor_file, print_routes
 from application.http_helper import CUSTOM_DEFAULT_HEADERS, set_hateos_links, set_hateos_meta, \
     get_favicon_32x32_data, get_favicon_16x16_data
 from application.http_resources.request import ApiRequest
 from application.http_resources.response import ApiResponse
 from application.logging import get_logger, set_debug_mode
-from application.openapi import api_schemas
-from application.openapi import spec, get_doc, generate_openapi_yml
+from application.migrations import models
+from application.openapi import spec, get_doc, generate_openapi_yml, api_schemas
 from application.services.healthcheck_manager import HealthCheckManager
 from application.services.product_manager import ProductManager
-from application.migrations import models
 
-# load directly by boot
-ENV = boot.get_environment()
-
-# config
-CONFIG = get_config()
+# # load directly by boot
+# ENV = boot.get_environment()
 # debug
 DEBUG = helper.debug_mode()
 
-# keep in this order, the app generic stream handler will be removed
-APP = Application(APP_NAME)
 # Logger
 LOGGER = get_logger(force=True)
-# override the APP logger
-APP.logger = LOGGER
+
+
+def create_app(configuration_object=None):
+    global LOGGER
+    # config
+    if configuration_object is None:
+        configuration_object = get_config()
+    # keep in this order, the app generic stream handler will be removed
+    app = Application(APP_NAME)
+    # set configurations
+    app.config.from_object(configuration_object)
+    # override the APP logger
+    app.logger = LOGGER
+
+    return app
+
+
+APP = create_app()
+
 # override the log configs
 if DEBUG:
+    APP.debug = DEBUG
     # override to the level desired
     set_debug_mode(LOGGER)
 
+# todo melhorar essa parte, removendo essas variaveis
 API_ROOT = os.environ['API_ROOT'] if 'API_ROOT' in os.environ else ''
 API_ROOT_ENDPOINT = API_ROOT if API_ROOT != '' or API_ROOT is None else '/'
 
 LOGGER.info("API_ROOT_ENDPOINT: {}".format(API_ROOT_ENDPOINT))
+
 
 @APP.route(API_ROOT_ENDPOINT)
 def index():
@@ -668,7 +683,7 @@ spec.path(view=product_soft_update,
 spec.path(view=product_delete,
           path="/v1/product/{uuid}", operations=get_doc(product_delete))
 print_routes(APP, LOGGER)
-LOGGER.info(f'Running at {ENV}')
+LOGGER.info(f'Running at {APP.config.get("ENV")}')
 
 # generate de openapi.yml
 generate_openapi_yml(spec, LOGGER, force=True)
@@ -680,7 +695,7 @@ api_schemas.register()
 # *************
 # compatibility with sqlalchemy
 run_compatible_with_sqlalchemy()
-URI = get_uri(CONFIG)
+URI = get_uri(APP.config)
 
 APP.config['SQLALCHEMY_DATABASE_URI'] = URI
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
